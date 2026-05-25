@@ -1,0 +1,751 @@
+{
+  "name": "Sistema de Alerta Temprana de Ingresos a Emergencias",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "[\n  {\n    \"index\": 0,\n    \"message\": {\n      \"role\": \"assistant\",\n      \"content\": \"{\\n  \\\"symptoms\\\": [\\\"dolor de pecho\\\", \\\"dificultad para respirar\\\"],\\n  \\\"specialty\\\": \\\"cardiología\\\",\\n  \\\"urgency\\\": \\\"alta\\\",\\n  \\\"requires_emergency\\\": true,\\n  \\\"reason\\\": \\\"El dolor de pecho junto con dificultad para respirar puede indicar una condición médica grave que requiere atención inmediata.\\\"\\n}\",\n      \"refusal\": null,\n      \"annotations\": []\n    },\n    \"logprobs\": null,\n    \"finish_reason\": \"stop\"\n  }\n]",
+        "options": {}
+      },
+      "id": "d8790634-38a9-491e-9178-d26cb90fe424",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -848,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"medical_history\":[\n  {\n    \"insurance_id\": \"A12345\",\n    \"condition\": \"Hipertensión\",\n    \"severity\": \"Alta\",\n    \"visit_type\": \"Emergency\",\n    \"hospital_name\": \"Hospital Central\",\n    \"visit_date\": \"2025-10-12\",\n    \"notes\": \"Crisis hipertensiva con ingreso a emergencia\"\n  },\n  {\n    \"insurance_id\": \"A12345\",\n    \"condition\": \"Diabetes tipo 2\",\n    \"severity\": \"Media\",\n    \"visit_type\": \"Regular\",\n    \"hospital_name\": \"Clínica Norte\",\n    \"visit_date\": \"2025-08-01\",\n    \"notes\": \"Control mensual de glucosa\"\n  },\n  {\n    \"insurance_id\": \"B77881\",\n    \"condition\": \"Asma\",\n    \"severity\": \"Media\",\n    \"visit_type\": \"Emergency\",\n    \"hospital_name\": \"San Rafael ER\",\n    \"visit_date\": \"2025-09-20\",\n    \"notes\": \"Crisis respiratoria aguda\"\n  },\n  {\n    \"insurance_id\": \"B77881\",\n    \"condition\": \"Alergia severa\",\n    \"severity\": \"Alta\",\n    \"visit_type\": \"Emergency\",\n    \"hospital_name\": \"Hospital Central\",\n    \"visit_date\": \"2025-11-05\",\n    \"notes\": \"Reacción alérgica a medicamento\"\n  },\n  {\n    \"insurance_id\": \"D55521\",\n    \"condition\": \"Enfermedad cardíaca\",\n    \"severity\": \"Alta\",\n    \"visit_type\": \"Emergency\",\n    \"hospital_name\": \"Hospital Central\",\n    \"visit_date\": \"2025-06-15\",\n    \"notes\": \"Dolor torácico agudo\"\n  },\n  {\n    \"insurance_id\": \"D55521\",\n    \"condition\": \"Obesidad\",\n    \"severity\": \"Media\",\n    \"visit_type\": \"Regular\",\n    \"hospital_name\": \"Clínica Norte\",\n    \"visit_date\": \"2025-03-10\",\n    \"notes\": \"Control nutricional\"\n  },\n  {\n    \"insurance_id\": \"E11223\",\n    \"condition\": \"Colesterol alto\",\n    \"severity\": \"Media\",\n    \"visit_type\": \"Regular\",\n    \"hospital_name\": \"Clínica Los Andes\",\n    \"visit_date\": \"2025-07-22\",\n    \"notes\": \"Seguimiento con estatinas\"\n  }\n]\n}",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "0f06416f-6f0c-4e3b-81e1-82325f04cb5e",
+      "name": "Medical_History_Json",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -784,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{ \"hospitals\":[\n  {\n    \"hospital_id\": \"H001\",\n    \"hospital_name\": \"Hospital Central\",\n    \"specialty\": \"Cardiología\",\n    \"network_level\": \"Premium\",\n    \"emergency_available\": true,\n    \"capacity_status\": \"Available\",\n    \"estimated_cost_index\": 1.0,\n    \"city\": \"Quito\"\n  },\n  {\n    \"hospital_id\": \"H002\",\n    \"hospital_name\": \"Clínica Norte\",\n    \"specialty\": \"Medicina General\",\n    \"network_level\": \"Standard\",\n    \"emergency_available\": true,\n    \"capacity_status\": \"Busy\",\n    \"estimated_cost_index\": 1.2,\n    \"city\": \"Quito\"\n  },\n  {\n    \"hospital_id\": \"H003\",\n    \"hospital_name\": \"MedCare Plus\",\n    \"specialty\": \"Traumatología\",\n    \"network_level\": \"Premium\",\n    \"emergency_available\": true,\n    \"capacity_status\": \"Available\",\n    \"estimated_cost_index\": 1.1,\n    \"city\": \"Quito\"\n  },\n  {\n    \"hospital_id\": \"H004\",\n    \"hospital_name\": \"San Rafael ER\",\n    \"specialty\": \"Emergencias\",\n    \"network_level\": \"Basic\",\n    \"emergency_available\": true,\n    \"capacity_status\": \"Full\",\n    \"estimated_cost_index\": 1.5,\n    \"city\": \"Quito\"\n  },\n  {\n    \"hospital_id\": \"H005\",\n    \"hospital_name\": \"Clínica Los Andes\",\n    \"specialty\": \"Cardiología\",\n    \"network_level\": \"Standard\",\n    \"emergency_available\": false,\n    \"capacity_status\": \"Available\",\n    \"estimated_cost_index\": 1.3,\n    \"city\": \"Quito\"\n  }\n]\n}",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "e08903c3-03a5-4274-a52c-2db3478e6971",
+      "name": "Hospitals_Json",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        -560,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\nconst policies = data.Policies || [];\nconst requestBody = data.body || {};\n\nconst id = requestBody.insurance_id;\nconst symptoms = requestBody.symptoms;\nconst hospital = requestBody.hospital;\n\nconst patient = policies.find(p => p.insurance_id === id);\n\nif (!patient) {\n  return [\n    {\n      json: {\n        ...data,\n        patient_found: false,\n        policy_valid: false,\n        error: \"Paciente no encontrado\",\n        searched_insurance_id: id || null\n      }\n    }\n  ];\n}\n\nreturn [\n  {\n    json: {\n      ...data,\n      patient_found: true,\n      selected_policy: patient,\n      insurance_id: patient.insurance_id,\n      patient_name: patient.patient_name,\n      active: patient.active,\n      plan: patient.plan,\n      coverage_level: patient.coverage_level,\n      coverage_start: patient.coverage_start,\n      coverage_end: patient.coverage_end,\n      emergency_coverage: patient.emergency_coverage,\n      deductible_remaining: patient.deductible_remaining,\n      status: patient.status,\n      symptoms,\n      hospital\n    }\n  }\n];\n"
+      },
+      "id": "1fd4d104-0ac9-4c67-9bd3-09c8e41a6832",
+      "name": "Buscar paciente por insurance_id",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -336,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "4922fa3f-7c59-4652-8c1b-5a811c062762",
+              "leftValue": "={{ $json.policy_valid }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "boolean",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "looseTypeValidation": true
+        }
+      },
+      "id": "3f60f23b-70ce-406a-9975-4c7a2e20baef",
+      "name": "IF Node Póliza valida?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "emergencia_ingreso",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "9e4dddb7-2376-4d4d-95b7-f44c33715fed",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -1232,
+        352
+      ],
+      "webhookId": "b43af134-d31a-4f0f-96b6-5b442d1d76f7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const policy = $('Policies_Json').first().json.Policies;\nconst pacient = $('Buscar paciente por insurance_id').first().json;\nconst today = new Date();\n\n// Verificaciones\nif (pacient.active !== true) {\n  return [\n    {\n      json: {\n        ...pacient,\n        policy_valid: false,\n        reason: \"La póliza no está activa\"\n      }\n    }\n  ];\n} else if (pacient.status !== \"Active\") {\n  return [\n    {\n      json: {\n        ...pacient,\n        policy_valid: false,\n        reason: `El estado de la póliza es '${pacient.status}'`\n      }\n    }\n  ];\n} else if (new Date(pacient.coverage_end) <= today) {\n  return [\n    {\n      json: {\n        ...pacient,\n        policy_valid: false,\n        reason: \"La póliza ha expirado\"\n      }\n    }\n  ];\n}\n\n// Si todo está OK, devolver solo paciente + datos originales\nreturn [\n  {\n    json: {\n      ...pacient\n    }\n  }\n];"
+      },
+      "id": "f7c25b1a-f4a0-4624-a562-781a1718103f",
+      "name": "Validación base de póliza",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "4922fa3f-7c59-4652-8c1b-5a811c062762",
+              "leftValue": "={{ $json.policy_valid }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "boolean",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "looseTypeValidation": true
+        }
+      },
+      "id": "8696e66a-f488-44d8-a550-89b05e09cb9f",
+      "name": "IF Node Póliza valida?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        416,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const medicalHistory = $('Medical_History_Json').first().json.medical_history;\n\n// Buscar historial por insurance_id\n// viene del Webhook\n\nconst patientId = String($('Webhook').first().json.insurance_id).trim();\n\n// 3️⃣ Filtrar todas las visitas de ese paciente\nconst patientHistory = medicalHistory.filter(record => \n  String(record.insurance_id).trim() === patientId\n);\n// Devolver resultado: si no hay historial, devolver array vacío\nreturn [\n  {\n    json: {\n      ...$('Validación base de póliza').first().json,\n      //id: patientId,\n      history: patientHistory ? patientHistory : [],\n      //medicalHistory: medicalHistory\n    }\n  }\n];"
+      },
+      "id": "9c6d0a84-637b-464f-8062-207ebda09d05",
+      "name": "Buscar historial médico by insurance_id",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Eres un agente de orientación médica administrativa.\n\nTu trabajo es:\n1. Detectar síntomas\n2. Recomendar especialidad médica\n3. Detectar urgencia\n\nIMPORTANTE:\n- NO diagnostiques enfermedades\n- NO recomiendes medicamentos\n- SOLO orientación administrativa\n\nResponde SOLO JSON válido con esta estructura:\n\n{\n  \"symptoms\": [],\n  \"specialty\": \"\",\n  \"urgency\": \"\",\n  \"requires_emergency\": false,\n  \"reason\": \"\"\n}\n\nMensaje del usuario:\n{{ $json.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fbaffaba-1197-4fc0-94f9-13ca27ecf27e",
+      "name": "OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1232,
+        -368
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const content = $json.message.content;\n\nreturn {...$('Buscar historial médico by insurance_id').first().json,json_IA: JSON.parse(content) }\n;"
+      },
+      "id": "43e7abc4-ab30-4c13-975c-92a25a0b2937",
+      "name": "Response OpenIA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "\n  {\n    \"index\": 0,\n    \"message\": {\n      \"role\": \"assistant\",\n      \"content\": \"{\\n  \\\"specialty\\\": \\\"Cardiología\\\",\\n  \\\"urgency\\\": \\\"alta\\\",\\n  \\\"requires_emergency\\\": true,\\n  \\\"recommended_hospital\\\": \\\"Hospital Central\\\",\\n  \\\"reason\\\": \\\"Paciente con dolor de pecho y antecedentes de hipertensión en emergencia y diabetes tipo 2, se requiere atención inmediata en cardiología para descartar eventos cardiovasculares graves.\\\",\\n  \\\"notification_text\\\": \\\"Paciente Juan Pérez presenta dolor de pecho con urgencia alta. Se recomienda atención especializada en Cardiología. Ingreso en Hospital Central para manejo inmediato y evaluación.\\\"\\n}\",\n      \"refusal\": null,\n      \"annotations\": []\n    },\n    \"logprobs\": null,\n    \"finish_reason\": \"stop\"\n  }\n",
+        "options": {}
+      },
+      "id": "7e4ecc1f-33d2-400f-9fd1-2fd1d29fe032",
+      "name": "OpenIA_Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        864,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e9b9290e-5ad0-47cf-a66a-af159a0eb1fc",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -384,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Eres un agente de orientación médica administrativa.\nPaciente: {{$json[\"patient_name\"]}}\nSíntomas: {{$json[\"symptoms\"]}}\nHospital actual: {{$json[\"hospital\"]}}\nHistorial relevante: {{ $json[\"history\"].map(h => h.condition + (h.visit_type === \"Emergency\" ? \" (emergencia)\" : \"\") ).join(\", \") }}\n\nTareas:\n1. Determina la especialidad médica más adecuada.\n2. Evalúa la urgencia (alta, media, baja).\n3. Indica si requiere atención de emergencia inmediata (true/false).\n4. Sugiere hospital recomendado si es necesario.\n5. Genera un **texto de notificación breve** para enviar al departamento de admisiones del hospital y al gestor de casos del seguro. Debe incluir:\n   - Nombre del paciente\n   - Síntomas\n   - Urgencia\n   - Especialidad recomendada\n   - Hospital sugerido si aplica\n\nDevuelve solo **JSON** con este formato:\n\n{\n  \"specialty\": \"...\",\n  \"urgency\": \"...\",\n  \"requires_emergency\": true/false,\n  \"recommended_hospital\": \"...\",\n  \"reason\": \"...\",\n  \"notification_text\": \"...\"\n}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b50450b0-cf3e-472c-94c0-be7fbebd9ee5",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"Policies\": [\n    {\n      \"insurance_id\": \"A12345\",\n      \"patient_name\": \"Juan Pérez\",\n      \"active\": true,\n      \"plan\": \"Plan Oro\",\n      \"coverage_level\": \"Premium\",\n      \"coverage_start\": \"2025-01-01\",\n      \"coverage_end\": \"2027-01-01\",\n      \"emergency_coverage\": 90,\n      \"deductible_remaining\": 200,\n      \"status\": \"Active\"\n    },\n    {\n      \"insurance_id\": \"B77881\",\n      \"patient_name\": \"María López\",\n      \"active\": true,\n      \"plan\": \"Plan Plata\",\n      \"coverage_level\": \"Standard\",\n      \"coverage_start\": \"2025-06-01\",\n      \"coverage_end\": \"2026-06-01\",\n      \"emergency_coverage\": 70,\n      \"deductible_remaining\": 500,\n      \"status\": \"Active\"\n    },\n    {\n      \"insurance_id\": \"C99812\",\n      \"patient_name\": \"Carlos Ruiz\",\n      \"active\": false,\n      \"plan\": \"Plan Básico\",\n      \"coverage_level\": \"Basic\",\n      \"coverage_start\": \"2024-01-01\",\n      \"coverage_end\": \"2025-01-01\",\n      \"emergency_coverage\": 50,\n      \"deductible_remaining\": 1000,\n      \"status\": \"Expired\"\n    }\n  ]\n}\n",
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1024,
+        352
+      ],
+      "id": "10aa9443-7cc2-4dd8-922d-fd0268dc6f98",
+      "name": "Policies_Json"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "03c44b44-adc8-4bcc-bda1-3deaa3c262b7",
+              "leftValue": "={{ $json.patient_found }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        144
+      ],
+      "id": "75a16bfd-7ad6-4d95-9d92-673a03f44668",
+      "name": "IF Paciente encontrado"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\n// fecha actual\nconst today = new Date();\n\n// fecha fin de cobertura\nconst coverageEnd = new Date(data.coverage_end);\n\nlet policy_valid = true;\nlet policy_error = null;\n\n// validar póliza activa\nif (!data.active) {\n  policy_valid = false;\n  policy_error = \"Póliza inactiva\";\n}\n\n// validar estado de póliza\nif (data.status !== \"Active\") {\n  policy_valid = false;\n  policy_error = \"Estado de póliza inválido\";\n}\n\n// validar fecha de cobertura\nif (coverageEnd < today) {\n  policy_valid = false;\n  policy_error = \"Cobertura expirada\";\n}\n\n// retorno final\nreturn [\n  {\n    json: {\n      ...data,\n      policy_valid,\n      policy_error\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        160
+      ],
+      "id": "594cb3e4-0d23-4fca-b754-4805e5211059",
+      "name": "Validación base de póliza1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\n// historial completo\nconst medicalHistory = data.medical_history || [];\n\n// insurance_id del paciente actual\nconst insuranceId = data.insurance_id;\n\n// filtrar historial\nconst patientHistory = medicalHistory.filter(\n  h => h.insurance_id === insuranceId\n);\n\n// ordenar por fecha más reciente\npatientHistory.sort((a, b) => \n  new Date(b.visit_date) - new Date(a.visit_date)\n);\n\nreturn [\n  {\n    json: {\n      ...data,\n      patient_medical_history: patientHistory,\n      emergency_visits: patientHistory.filter(\n        h => h.visit_type === \"Emergency\"\n      ),\n      total_history_records: patientHistory.length\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        128
+      ],
+      "id": "7f20477f-47ad-4b11-917b-f744e7dea1b2",
+      "name": "Filtrar historial médico"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d380493c-0ef9-4dc4-9903-e26c7fd75cc3",
+              "leftValue": "={{ $json.policy_valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        496,
+        128
+      ],
+      "id": "cd0830a0-430d-45f5-8e8e-b8bc8bae91d8",
+      "name": "IF Póliza válida"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\nconst symptoms = (data.symptoms || \"\").toLowerCase();\n\nlet risk_score = 0;\nlet priority = \"LOW\";\nlet alerts = [];\n\n\nif (\n  symptoms.includes(\"dolor de pecho\") ||\n  symptoms.includes(\"pecho\")\n) {\n  risk_score += 40;\n  alerts.push(\"Posible problema cardíaco\");\n}\n\nif (\n  symptoms.includes(\"dificultad para respirar\") ||\n  symptoms.includes(\"respirar\")\n) {\n  risk_score += 35;\n  alerts.push(\"Problema respiratorio\");\n}\n\nif (\n  symptoms.includes(\"desmayo\") ||\n  symptoms.includes(\"convulsión\")\n) {\n  risk_score += 50;\n  alerts.push(\"Evento neurológico crítico\");\n}\n\nif (\n  symptoms.includes(\"sangrado\")\n) {\n  risk_score += 30;\n  alerts.push(\"Posible hemorragia\");\n}\n\n\nconst history = data.patient_medical_history || [];\n\nhistory.forEach(record => {\n\n  const condition = (record.condition || \"\").toLowerCase();\n  const severity = (record.severity || \"\").toLowerCase();\n\n  if (severity === \"alta\") {\n    risk_score += 15;\n  }\n\n  if (\n    condition.includes(\"hipertensión\") ||\n    condition.includes(\"card\")\n  ) {\n    risk_score += 20;\n    alerts.push(\"Antecedente cardiovascular\");\n  }\n\n  if (\n    condition.includes(\"asma\")\n  ) {\n    risk_score += 15;\n    alerts.push(\"Antecedente respiratorio\");\n  }\n\n  if (\n    condition.includes(\"diabetes\")\n  ) {\n    risk_score += 10;\n    alerts.push(\"Paciente diabético\");\n  }\n\n});\n\n\nconst emergencyVisits = data.emergency_visits || [];\n\nif (emergencyVisits.length >= 1) {\n  risk_score += 20;\n  alerts.push(\"Historial de emergencias\");\n}\n\nif (emergencyVisits.length >= 3) {\n  risk_score += 30;\n  alerts.push(\"Frecuentes emergencias\");\n}\n\n\nif (risk_score >= 80) {\n  priority = \"CRITICAL\";\n}\nelse if (risk_score >= 60) {\n  priority = \"HIGH\";\n}\nelse if (risk_score >= 30) {\n  priority = \"MEDIUM\";\n}\n\nreturn [\n  {\n    json: {\n      ...data,\n\n      risk_score,\n      priority,\n      alerts,\n\n      ai_ready_summary: {\n        patient: data.patient_name,\n        symptoms: data.symptoms,\n        priority,\n        risk_score,\n        alerts,\n        emergency_history_count: emergencyVisits.length\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        32
+      ],
+      "id": "14930bc6-89b6-47b7-b032-d62ee0c950a4",
+      "name": "Evaluar riesgo médico"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\n\nconst hospitals = Array.isArray(data.hospitals) ? data.hospitals : [];\n\nconst priority = data.priority;\nconst coverage = data.coverage_level;\nconst requestedHospitalName = data.hospital;\n\n\nlet availableHospitals = hospitals.filter(h =>\n  h.emergency_available === true &&\n  h.capacity_status !== \"Full\"\n);\n\n\nif (coverage === \"Premium\") {\n  const premiumHospitals = availableHospitals.filter(\n    h => h.network_level === \"Premium\"\n  );\n\n  if (premiumHospitals.length > 0) {\n    availableHospitals = premiumHospitals;\n  }\n}\n\n\nconst requestedHospital = availableHospitals.find(\n  h => h.hospital_name === requestedHospitalName\n);\n\nif (requestedHospital) {\n  availableHospitals = [\n    requestedHospital,\n    ...availableHospitals.filter(\n      h => h.hospital_name !== requestedHospitalName\n    )\n  ];\n}\n\nif (priority === \"CRITICAL\") {\n  availableHospitals.sort((a, b) => {\n    if (a.hospital_name === requestedHospitalName) return -1;\n    if (b.hospital_name === requestedHospitalName) return 1;\n\n    return a.estimated_cost_index - b.estimated_cost_index;\n  });\n} else if (priority === \"HIGH\") {\n  const capacityOrder = {\n    \"Available\": 1,\n    \"Busy\": 2,\n    \"Full\": 3\n  };\n\n  availableHospitals.sort((a, b) => {\n    if (a.hospital_name === requestedHospitalName) return -1;\n    if (b.hospital_name === requestedHospitalName) return 1;\n\n    return capacityOrder[a.capacity_status] -\n      capacityOrder[b.capacity_status];\n  });\n} else {\n  availableHospitals.sort((a, b) => {\n    if (a.hospital_name === requestedHospitalName) return -1;\n    if (b.hospital_name === requestedHospitalName) return 1;\n\n    return a.estimated_cost_index - b.estimated_cost_index;\n  });\n}\n\n// Hospital seleccionado\nconst recommendedHospital =\n  availableHospitals.length > 0\n    ? availableHospitals[0]\n    : null;\n\n// Respuesta final del nodo\nreturn [\n  {\n    json: {\n      ...data,\n\n      recommended_hospital: recommendedHospital,\n\n      hospital_recommendation_summary: recommendedHospital\n        ? {\n            hospital_name: recommendedHospital.hospital_name,\n            specialty: recommendedHospital.specialty,\n            network_level: recommendedHospital.network_level,\n            capacity_status: recommendedHospital.capacity_status,\n            emergency_available: recommendedHospital.emergency_available,\n            estimated_cost_index: recommendedHospital.estimated_cost_index,\n            reason: `Hospital recomendado por prioridad ${priority}, cobertura ${coverage} y disponibilidad de emergencia.`\n          }\n        : {\n            error: \"No hay hospitales disponibles para emergencia.\"\n          }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        32
+      ],
+      "id": "fe776916-b8f0-4398-8a65-589373268ffe",
+      "name": "Recomendar hospital"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://emergia_ollama:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"phi3:mini\",\n  \"stream\": false,\n  \"prompt\": \"Eres un agente de orientación médica administrativa para ingresos hospitalarios de emergencia. No diagnostiques enfermedades ni recomiendes medicamentos. Tu función es orientar administrativamente, clasificar prioridad y generar notificaciones operativas.\\n\\nDatos del caso:\\nPaciente: {{$json.patient_name}}\\nNúmero de póliza: {{$json.insurance_id}}\\nPlan: {{$json.plan}}\\nCobertura: {{$json.coverage_level}}\\nPóliza válida: {{$json.policy_valid}}\\nSíntomas reportados: {{$json.symptoms}}\\nHospital actual solicitado: {{$json.hospital}}\\nPrioridad calculada por reglas: {{$json.priority}}\\nScore de riesgo: {{$json.risk_score}}\\nAlertas detectadas: {{$json.alerts}}\\nHistorial médico relevante: {{ $json.patient_medical_history.map(h => h.condition + ' - severidad ' + h.severity + (h.visit_type === 'Emergency' ? ' (emergencia previa)' : '')).join(', ') }}\\nHospital recomendado por reglas: {{$json.hospital_recommendation_summary.hospital_name}}\\nEspecialidad del hospital recomendado: {{$json.hospital_recommendation_summary.specialty}}\\nDisponibilidad hospitalaria: {{$json.hospital_recommendation_summary.capacity_status}}\\n\\nTareas:\\n1. Determina la especialidad médica más adecuada.\\n2. Evalúa la urgencia usando solo estos valores: LOW, MEDIUM, HIGH, CRITICAL.\\n3. Indica si requiere atención de emergencia inmediata con true o false.\\n4. Sugiere el hospital recomendado.\\n5. Genera un texto breve de notificación para admisiones del hospital.\\n6. Genera un texto breve de notificación para el gestor de casos del seguro.\\n7. Genera una acción administrativa concreta.\\n\\nDevuelve únicamente JSON válido. No uses markdown. No agregues explicaciones fuera del JSON. Usa exactamente este formato:\\n{\\n  \\\"case_status\\\": \\\"processed\\\",\\n  \\\"urgency\\\": \\\"LOW|MEDIUM|HIGH|CRITICAL\\\",\\n  \\\"requires_emergency\\\": true,\\n  \\\"recommended_specialty\\\": \\\"\\\",\\n  \\\"recommended_hospital\\\": \\\"\\\",\\n  \\\"reason\\\": \\\"\\\",\\n  \\\"hospital_notification\\\": \\\"\\\",\\n  \\\"insurance_notification\\\": {\\n    \\\"provider\\\": \\\"\\\",\\n    \\\"policy_number\\\": \\\"\\\",\\n    \\\"message\\\": \\\"\\\"\\n  },\\n  \\\"administrative_action\\\": \\\"\\\"\\n}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1104,
+        -256
+      ],
+      "id": "57724bc4-8321-4928-afa8-d2ca193eb233",
+      "name": "Ollama IA Local"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\nconst hospitalNotification = {\n    \n    notification_sent: true,\n\n    target_department: \"Admisiones Emergencia\",\n\n    hospital:\n        data.notifications.hospital.hospital_name,\n\n    priority:\n        data.ai_analysis.urgency,\n\n    message:\n        data.notifications.hospital.message,\n\n    generated_at:\n        new Date().toISOString(),\n\n    admission_case: {\n\n        patient_policy:\n            data.patient_summary.insurance_id,\n\n        specialty:\n            data.patient_summary.specialty,\n\n        triage_color:\n            data.triage_color,\n\n        workflow_status:\n            data.workflow_status\n    }\n};\n\nreturn [\n    {\n        json: {\n\n            ...data,\n\n            hospital_notification_result:\n                hospitalNotification\n        }\n    }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        32
+      ],
+      "id": "54fb770a-4ba7-4537-9baa-2fbb5e7923ae",
+      "name": "Run Once for All Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\nlet rawResponse = data.response || \"\";\n\n\nrawResponse = rawResponse\n    .replace(/```json/g, \"\")\n    .replace(/```/g, \"\")\n    .trim();\n\nconst firstBrace = rawResponse.indexOf(\"{\");\nconst lastBrace = rawResponse.lastIndexOf(\"}\");\n\nif (firstBrace !== -1 && lastBrace !== -1) {\n\n    rawResponse = rawResponse.substring(\n        firstBrace,\n        lastBrace + 1\n    );\n}\n\n\nlet aiParsed = {};\n\ntry {\n\n    aiParsed = JSON.parse(rawResponse);\n\n} catch (error) {\n\n    aiParsed = {\n\n        case_status: \"error\",\n\n        urgency: \"UNKNOWN\",\n\n        recommended_specialty: \"No definida\",\n\n        recommended_hospital: \"No asignado\",\n\n        requires_emergency: false,\n\n        reason:\n            \"No se pudo interpretar respuesta IA\",\n\n        administrative_action:\n            \"Revisión manual requerida\",\n\n        raw_response:\n            rawResponse\n    };\n}\n\nconst specialty =\n    aiParsed.recommended_specialty || \"No definida\";\n\nconst hospital =\n    aiParsed.recommended_hospital || \"No asignado\";\n\nconst urgency =\n    aiParsed.urgency || \"UNKNOWN\";\n\n\nlet triageColor = \"GREEN\";\n\nif (urgency === \"CRITICAL\") {\n\n    triageColor = \"RED\";\n\n}\nelse if (urgency === \"HIGH\") {\n\n    triageColor = \"ORANGE\";\n\n}\nelse if (urgency === \"MEDIUM\") {\n\n    triageColor = \"YELLOW\";\n}\n\nconst webhookData =\n    $node[\"Webhook\"].json.body;\n\n\nreturn [\n    {\n        json: {\n\n            processed_at:\n                new Date().toISOString(),\n\n            workflow_status:\n                \"PROCESSED\",\n\n            triage_color:\n                triageColor,\n\n            ai_analysis: {\n\n                ...aiParsed,\n\n                specialty:\n                    specialty,\n\n                hospital:\n                    hospital\n            },\n\n            patient_summary: {\n\n                insurance_id:\n                    webhookData.insurance_id,\n\n                urgency:\n                    urgency,\n\n                recommended_hospital:\n                    hospital,\n\n                specialty:\n                    specialty\n            },\n\n            notifications: {\n\n                hospital: {\n\n                    send: true,\n\n                    hospital_name:\n                        hospital,\n\n                    message:\n                        `ALERTA ${urgency}: paciente requiere atención en ${specialty}`\n                },\n\n                insurance: {\n\n                    send: true,\n\n                    provider:\n                        \"Plan Oro\",\n\n                    policy_number:\n                        webhookData.insurance_id,\n\n                    message:\n                        `Caso crítico detectado para póliza ${webhookData.insurance_id}`\n                }\n            },\n\n            full_ai_response:\n                aiParsed\n        }\n    }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        32
+      ],
+      "id": "b6f179c3-4674-4a3c-bdc8-1c7919613bd1",
+      "name": "Procesar respuesta IA"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\nconst ai = data.ai_analysis || {};\n\nconst hospitalNotification =\n  data.hospital_notification_result || {};\n\nconst insuranceNotification =\n  data.insurance_notification_result || {};\n\n\n\nlet triageColor = \"GREEN\";\n\nif (ai.urgency === \"CRITICAL\") {\n  triageColor = \"RED\";\n}\nelse if (ai.urgency === \"HIGH\") {\n  triageColor = \"ORANGE\";\n}\nelse if (ai.urgency === \"MEDIUM\") {\n  triageColor = \"YELLOW\";\n}\n\n\n\nreturn [\n  {\n    json: {\n\n      system: {\n        name: \"EmergIA\",\n        module: \"Sistema de Alerta Temprana\",\n        status: \"SUCCESS\",\n        processed_at: new Date().toISOString()\n      },\n\n      patient: {\n        urgency: ai.urgency || \"UNKNOWN\",\n        triage_color: triageColor\n      },\n\n      medical_analysis: {\n        specialty:\n          ai.recommended_specialty || \"No definida\",\n\n        reason:\n          ai.reason || \"Sin análisis disponible\"\n      },\n\n      hospital_assignment: {\n        hospital:\n          ai.recommended_hospital || \"No asignado\",\n\n        notification_sent:\n          hospitalNotification.notification_sent || false,\n\n        department:\n          hospitalNotification.target_department\n            || \"No definido\"\n      },\n\n      insurance_case: {\n        escalation_level:\n          insuranceNotification.escalation_level\n            || \"NORMAL\",\n\n        authorization_priority:\n          insuranceNotification.authorization_priority\n            || \"NORMAL\",\n\n        estimated_response_time:\n          insuranceNotification.estimated_response_time\n            || \"30 minutos\"\n      },\n\n      workflow: {\n        policy_validated: true,\n        medical_history_analyzed: true,\n        ai_analysis_completed: true,\n        hospital_notified:\n          hospitalNotification.notification_sent || false,\n\n        insurance_notified:\n          insuranceNotification.case_created || false\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1952,
+        32
+      ],
+      "id": "14177670-3553-46af-a1c9-11d0ced56963",
+      "name": "Respuesta final API"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $json;\n\n\nconst urgency =\n    data.ai_analysis.urgency;\n\nconst policyNumber =\n    data.patient_summary.insurance_id;\n\nconst provider =\n    data.notifications.insurance.provider;\n\n\nlet escalationLevel = \"NORMAL\";\n\nif (urgency === \"CRITICAL\") {\n    escalationLevel = \"MAXIMUM\";\n}\nelse if (urgency === \"HIGH\") {\n    escalationLevel = \"HIGH\";\n}\nelse if (urgency === \"MEDIUM\") {\n    escalationLevel = \"MEDIUM\";\n}\n\n\nconst insuranceCase = {\n\n    case_created: true,\n\n    provider: provider,\n\n    policy_number: policyNumber,\n\n    urgency: urgency,\n\n    escalation_level: escalationLevel,\n\n    assigned_department:\n        \"Gestión de Casos Médicos\",\n\n    assigned_adjuster:\n        urgency === \"CRITICAL\"\n            ? \"Senior Medical Adjuster\"\n            : \"Standard Medical Adjuster\",\n\n    authorization_priority:\n        urgency === \"CRITICAL\"\n            ? \"IMMEDIATE\"\n            : \"NORMAL\",\n\n    estimated_response_time:\n        urgency === \"CRITICAL\"\n            ? \"5 minutos\"\n            : \"30 minutos\",\n\n    administrative_action:\n        data.ai_analysis.administrative_action,\n\n    generated_at:\n        new Date().toISOString()\n};\n\nreturn [\n    {\n        json: {\n\n            ...data,\n\n            insurance_notification_result:\n                insuranceCase\n        }\n    }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1744,
+        32
+      ],
+      "id": "a8188fba-29bb-46c2-8696-b12e5bae38d6",
+      "name": "Notificar seguro"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2160,
+        32
+      ],
+      "id": "44053b40-97f9-45c8-9e53-221110ecf78a",
+      "name": "respuesta Final API"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Medical_History_Json": {
+      "main": [
+        [
+          {
+            "node": "Hospitals_Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hospitals_Json": {
+      "main": [
+        [
+          {
+            "node": "Buscar paciente por insurance_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar paciente por insurance_id": {
+      "main": [
+        [
+          {
+            "node": "IF Paciente encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Policies_Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Node Póliza valida?": {
+      "main": [
+        [
+          {
+            "node": "Validación base de póliza",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validación base de póliza": {
+      "main": [
+        [
+          {
+            "node": "IF Node Póliza valida?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Node Póliza valida?1": {
+      "main": [
+        [
+          {
+            "node": "Buscar historial médico by insurance_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar historial médico by insurance_id": {
+      "main": [
+        [
+          {
+            "node": "OpenIA_Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenIA_Response": {
+      "main": [
+        [
+          {
+            "node": "Response OpenIA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Policies_Json": {
+      "main": [
+        [
+          {
+            "node": "Medical_History_Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Paciente encontrado": {
+      "main": [
+        [
+          {
+            "node": "Validación base de póliza1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validación base de póliza1": {
+      "main": [
+        [
+          {
+            "node": "Filtrar historial médico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar historial médico": {
+      "main": [
+        [
+          {
+            "node": "IF Póliza válida",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Póliza válida": {
+      "main": [
+        [
+          {
+            "node": "Evaluar riesgo médico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluar riesgo médico": {
+      "main": [
+        [
+          {
+            "node": "Recomendar hospital",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recomendar hospital": {
+      "main": [
+        [
+          {
+            "node": "Ollama IA Local",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama IA Local": {
+      "main": [
+        [
+          {
+            "node": "Procesar respuesta IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procesar respuesta IA": {
+      "main": [
+        [
+          {
+            "node": "Run Once for All Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Once for All Items": {
+      "main": [
+        [
+          {
+            "node": "Notificar seguro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notificar seguro": {
+      "main": [
+        [
+          {
+            "node": "Respuesta final API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respuesta final API": {
+      "main": [
+        [
+          {
+            "node": "respuesta Final API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c2ec9f0f-1a6a-4363-8ebd-06257eb425f4",
+  "meta": {
+    "instanceId": "b792e6bd41f8e952323224ec052c6650d5d24d0dc9133f18dccef248dc3723f1"
+  },
+  "id": "ScKP4RvAtLosJgg6",
+  "tags": []
+}
